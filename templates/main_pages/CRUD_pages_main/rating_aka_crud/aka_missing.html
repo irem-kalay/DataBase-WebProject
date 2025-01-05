@@ -1,0 +1,69 @@
+{% extends "main.html" %}
+
+{% block title %}Update Movie Details{% endblock %}
+
+{% block extra_styles %}
+
+{% endblock %}
+
+{% block content %}
+<h1>Update Movie Details for {{ result.id }}</h1>
+<p>aka missing</p>
+
+<!-- Form for updating rating and votes -->
+<form method="POST" action="/rating_update/{{ result.id }}">
+    <div>
+        <label for="rating">Rating:</label>
+        <input 
+            type="number" 
+            step="0.01" 
+            id="rating" 
+            name="rating" 
+            value="{{ rating if rating else 'None' }}" 
+            placeholder="{{ result.rating }}">
+    </div>
+    <div>
+        <label for="votes">Number of Votes:</label>
+        <input 
+            type="number" 
+            id="votes" 
+            name="votes" 
+            value="{{ votes if votes else 'None' }}" 
+            placeholder="{{ result.votes }}">
+    </div>
+    <button type="submit">Update</button>
+</form>
+
+<!-- Delete Rating Form -->
+<form method="POST" action="/delete_rating/{{ result.id }}">
+    <button type="submit">Delete Rating</button>
+</form>
+
+<!-- Form for adding new Aka (Alternate Title) -->
+<form method="POST" action="/aka_add/{{ result.id }}">
+    <div>
+        <h2>Add New Alternate Title</h2>
+        <label for="new_aka_title">Title:</label>
+        <input 
+            type="text" 
+            id="new_aka_title" 
+            name="new_aka_title" 
+            placeholder="Enter new alternate title">
+        
+        <label for="new_aka_country">Country:</label>
+        <input 
+            type="text" 
+            id="new_aka_country" 
+            name="new_aka_country" 
+            placeholder="Enter country">
+
+        <label for="new_aka_isOriginal">Is Original?</label>
+        <input 
+            type="checkbox" 
+            id="new_aka_isOriginal" 
+            name="new_aka_isOriginal">
+    </div>
+    <button type="submit">Add New Aka</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,177 @@
+body {
+    background-color: darkgrey; /*Arka plan*/
+}
+/* Arama çubuğu için stil */
+/* Arama barı stil */
+#search-bar {
+    width: 50%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.scrollable-table {
+     position: relative; /* Sayfa akışına göre konumlandırma */
+    margin-top: 10px;   /* Search bar ile arada biraz boşluk */
+    max-height: 400px;  /* Maksimum yükseklik */
+    width: 690px;       /* Genişlik */
+    overflow-y: scroll; /* İçerik taşarsa dikey kaydırma */
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: lightblue;
+    z-index: 999;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+}
+/*buraya scroll table kısmını ekliyorum*/
+/* Scrollable table styles */
+.scrollable-table table {
+    width: 100%;       /* Tabloyu genişliğe göre ayarla */
+    border-collapse: collapse;
+    font-size: 14px;    /* Tabloyu küçültmek için yazı boyutunu küçült */
+}
+
+.scrollable-table table th,
+.scrollable-table table td {
+    padding: 5px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.scrollable-table table th {
+    background-color: #f4f4f4;
+}
+
+
+/*burda table var*/
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f4f4f4;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* Button styles */
+.btn {
+    padding: 5px 10px;
+    margin: 5px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+}
+
+/* Styling for the floating box */
+
+
+/* Button inside the floating box BOX kısmı*/
+#tv-series-box .btn-box {
+    margin-top: 40px;
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#tv-series-box .btn-box:hover {
+    background-color: #0056b3;
+}
+
+#tv-series-box {
+    position: absolute;
+    top: 200px;
+    left: 80%;
+    transform: translateX(-50%);
+    width: 20%;  /* Sayfanın %50'si kadar genişlik */
+    height: 50%; /* Sayfanın %50'si kadar yükseklik */
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    display: block;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 18px;
+    z-index: 1000;
+}
+
+
+/*BEST OF 2022 TABLE İÇİN*/
+/* Tabloyu genel olarak stilize etme */
+#best-of-2022-table {
+    background-color: pink;
+    width: 50%; /* Tabloyu tam genişlikte yap */
+    border-collapse: collapse; /* Kenarlıkların birleşmesini sağlar */
+    margin: 20px 0; /* Üst ve alt margin */
+    font-family: Arial, sans-serif; /* Yazı tipi */
+}
+
+/* Tablo başlıkları */
+#best-of-2022-table thead {
+    background-color: black; /* Başlık arka plan rengi */
+    color: white; /* Başlık yazı rengi */
+    text-align: left; /* Başlıkları sola hizala */
+}
+
+/* Tablo hücreleri */
+#best-of-2022-table th, #best-of-2022-table td {
+    padding: 12px 15px; /* Hücrelere iç boşluk ekle */
+    border: 1px solid #ddd; /* Hücre kenarlıkları */
+}
+
+
+#best-of-2022-table tbody tr:hover {
+    background-color: #ddd; /* Satır üzerine gelindiğinde renk değişimi */
+}
+
+
+#best-of-2022-table td {
+    font-size: 16px; /* Yazı boyutunu küçült */
+}
+
+/* Başlıkları daha büyük yapmak */
+#best-of-2022-table th {
+    color: black;
+    font-size: 18px; /* Başlık yazı boyutunu artır */
+    font-weight: bold; /* Başlık yazısını kalın yap */
+}
+
+.add-tv-series-btn {
+    margin-bottom: 50px; /* Butonun altına 20px boşluk ekler */
+}

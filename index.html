@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title_Basics</title>
+    <script src="/fetch.js" defer></script>
+</head>
+<body>
+    <h1>Title Basics</h1>
+
+    <!-- Fetch Data Button -->
+    <button onclick="fetchData()">Fetch Data</button>
+    <div id="data"></div>
+
+    <!-- Form to Add Entry -->
+    <h2>Add New Title</h2>
+    <form id="addTitleForm">
+        <input type="text" id="titleType" placeholder="Title Type" required>
+        <input type="text" id="primaryTitle" placeholder="Primary Title" required>
+        <input type="text" id="originalTitle" placeholder="Original Title" required>
+        <input type="number" id="isAdult" placeholder="Is Adult (0 or 1)" required>
+        <input type="text" id="startYear" placeholder="Start Year">
+        <input type="text" id="endYear" placeholder="End Year">
+        <input type="number" id="runtimeMinutes" placeholder="Runtime Minutes">
+        <input type="text" id="genres" placeholder="Genres">
+        <button type="button" onclick="addTitle()">Add Title</button>
+    </form>
+
+    <div id="addMessage"></div>
+
+    <!-- Update Form -->
+
+        <h3>Update Title</h3>
+        <form id="updateTitleForm">
+            <input type="hidden" id="updateId">
+            <input type="text" id="updateTitleType" placeholder="Title Type" required>
+            <input type="text" id="updatePrimaryTitle" placeholder="Primary Title" required>
+            <input type="text" id="updateOriginalTitle" placeholder="Original Title" required>
+            <input type="number" id="updateIsAdult" placeholder="Is Adult (0 or 1)" required>
+            <input type="text" id="updateStartYear" placeholder="Start Year">
+            <input type="text" id="updateEndYear" placeholder="End Year">
+            <input type="number" id="updateRuntimeMinutes" placeholder="Runtime Minutes">
+            <input type="text" id="updateGenres" placeholder="Genres">
+            <button type="button" onclick="updateTitle()">Update Title</button>
+            <button type="button" onclick="document.getElementById('updateForm').style.display = 'none';">Cancel</button>
+        </form>
+
+</body>
+</html>

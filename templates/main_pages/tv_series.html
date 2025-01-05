@@ -1,0 +1,200 @@
+{% extends "main.html" %}
+
+{% block title %}TV Series{% endblock %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/tv_series.css') }}">
+{% endblock %}
+
+{% block content %}
+<body class="{% if request.path == '/tv_series' %}tv-series-page{% elif request.path == '/movies' %}movies-page{% elif request.path == '/directors' %}directors-page{% elif request.path == '/actors' %}actors-page{% endif %}">
+
+ <div class="search-bar">
+    <input type="text" id="search-bar" placeholder="Search TV Series" onkeyup="searchSeries()">
+</div>
+
+ <form method="GET" action="{{ url_for('tv_series_page') }}">
+    <div>
+        <label for="order">Sort by Rating:</label>
+        <select name="order" onchange="this.form.submit()">
+            <option value="ASC" {% if order == 'ASC' %}selected{% endif %}>Descending</option>
+            <option value="DESC" {% if order == 'DESC' %}selected{% endif %}>Ascending</option>
+        </select>
+    </div>
+</form>
+
+
+
+    <div class="scrollable-table">
+        <table id="tv-series-table">
+            <thead>
+                <tr>
+                    <th>Tv Series</th>
+
+                    <th>Rating</th>
+                    <th>Start Year of Series</th>
+                    <th>End Year of Series</th>
+                    <th>Edit & Delete   </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for series in tv_series %}
+                <tr>
+                    <td><a href="/episodes/{{ series.tconst }}">{{ series.title }}</a></td>
+
+                    <td>{{ series.averageRating or 'N/A' }}</td>
+                    <td>{{ series.startYear or 'N/A' }}</td>
+                    <td>{{ series.endYear or 'N/A' }}</td>
+                    <td>
+                        <!-- Update Button -->
+                    <a href="{{ url_for('tv_series_update.update_tv_series_route', tconst=series.tconst) }}" class="btn">Edit</a>
+                                  <!-- Delete Button -->
+                    <a href="{{ url_for('tv_series_delete.delete_tv_series_route', tconst=series.tconst) }}" class="btn">Delete</a>
+                       <!-- Series Detail Button (linking to the same route) -->
+    <a href="{{ url_for('title_details', tconst=series.tconst) }}" class="btn">Series Detail</a>
+                       <!-- <a href="/episodes/{{ series.tconst }}" class="btn">Episodes</a>-->
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+ <!-- "Add" butonunu ekledim-->
+<a href="{{ url_for('tv_series_add.add_tv_series') }}" class="add-tv-series-btn">Add TV Series</a>
+
+
+ <!-- Year Selection for Best of TV Series -->
+<div class="year-selection">
+    <label for="year">Select Year To See Best of the Tv Series: </label>
+    <select id="year" onchange="location.href='/tv_series?year=' + this.value">
+        <option value="2024" {% if selected_year == 2024 %}selected{% endif %}>2024</option>
+        <option value="2023" {% if selected_year == 2023 %}selected{% endif %}>2023</option>
+        <option value="2022" {% if selected_year == 2022 %}selected{% endif %}>2022</option>
+        <option value="2021" {% if selected_year == 2021 %}selected{% endif %}>2021</option>
+        <option value="2020" {% if selected_year == 2024 %}selected{% endif %}>2020</option>
+        <!-- Daha fazla yıl ekleyebilirsiniz -->
+    </select>
+</div>
+
+   <!-- Yearly Best TV Series Table -->
+    {% if best_year_series %}
+
+    <h2>Best TV Series of {{ best_year_series[0].startYear }}</h2>
+    <div class="scrollable-container2">
+
+ <a href="/episodes/{{ best_year_series[0].tconst }}" class="series-box2-link">
+    <div class="series-box2">
+        <h3>{{ best_year_series[0].title }}</h3>
+        <p>Rating: {{ best_year_series[0].averageRating or 'N/A' }}</p>
+    </div>
+
+
+<!--
+    <div class="scrollable-row2">
+        {% for series in best_year_series[1:] %}
+         <a href="/episodes/{{ series.tconst }}" class="series-box2-link">
+        <div class="series-box2">
+            <h3>{{ series.title }}</h3>
+            <p>Rating: {{ series.averageRating or 'N/A' }}</p>
+        </div>
+        {% endfor %}
+    </div>
+ -->
+</div>
+    {% else %}
+    <p>No data available for the selected year.</p>
+    {% endif %}
+
+
+
+
+        </tbody>
+    </table>
+
+    <!-- The TV Series Box -->
+    <div id="tv-series-box">
+        <p id="tv-series-title">Loading...</p>
+        <img id="tv-series-poster" style="width: 100%; border-radius: 8px; margin-top: 10px;"/>
+        <div id="poster-container"></div> <!-- Random posterler var -->
+
+        <button class="btn-box" onclick="viewEpisodes()">View Episodes</button>
+    </div>
+
+
+    <script>
+        let currentIndex = 0;
+        const tvSeries = JSON.parse('{{ tv_series|tojson|safe }}');
+        const tvSeriesBox = document.getElementById("tv-series-box");
+        const tvSeriesTitle = document.getElementById("tv-series-title");
+
+        const tvSeriesPoster = document.getElementById("tv-series-poster");
+
+         // Posterlerin bulunduğu dizin
+    // Posterlerin bulunduğu dizin (Flask'ta static klasörüne yönlendirme yapmamız lazım)
+    const posterImages = [
+        '{{ url_for("static", filename="posters/poster1.png") }}',
+        '{{ url_for("static", filename="posters/poster2.png") }}',
+        '{{ url_for("static", filename="posters/poster3.png") }}',
+        '{{ url_for("static", filename="posters/poster4.png") }}',
+        '{{ url_for("static", filename="posters/poster5.png") }}'
+    ];
+
+        // Function to show the TV series title inside the fixed box
+        function showTVSeriesBox() {
+            const series = tvSeries[currentIndex];
+            tvSeriesTitle.textContent = series.title;  // Set the title inside the box
+
+       // Set the corresponding poster
+        tvSeriesPoster.src = posterImages[currentIndex%5]; // Use currentIndex to show corresponding poster
+
+// Set the size of the poster image
+    tvSeriesPoster.style.width = '60%';   // Width of 60%
+    tvSeriesPoster.style.height = 'auto';  // Height adjusts automatically to keep aspect ratio
+    tvSeriesPoster.style.maxWidth = '300px';  // Set max width to 300px
+
+
+            // Auto-switch to next series every 3 seconds
+            currentIndex = (currentIndex + 1) % tvSeries.length;
+
+            // Continue switching the title every 3 seconds
+            setTimeout(showTVSeriesBox, 3000);
+        }
+
+        // Function when user clicks to view episodes
+        function viewEpisodes() {
+            const tconst = tvSeries[currentIndex].tconst;
+            window.location.href = `/episodes/${tconst}`;
+        }
+
+        // Start showing the TV Series box
+        setTimeout(showTVSeriesBox, 1000);  // Start after 1 second
+
+
+        //search bar için
+  // Arama fonksiyonu
+    function searchSeries() {
+        const searchQuery = document.getElementById("search-bar").value.toLowerCase();
+
+        const table = document.getElementById("tv-series-table");
+        const rows = table.getElementsByTagName("tr");  // Tablo satırlarını al
+
+        for (let i = 1; i < rows.length; i++) {
+            const seriesTitle = rows[i].getElementsByTagName("td")[0].textContent.toLowerCase();
+
+            if (seriesTitle.includes(searchQuery)){
+                rows[i].style.display = "";  // Eşleşiyorsa görünür yap
+            } else {
+                rows[i].style.display = "none";  // Eşleşmeyenleri gizle
+            }
+        }
+    }
+    </script>
+
+
+
+</body>
+
+{% endblock %}

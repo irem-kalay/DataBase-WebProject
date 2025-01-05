@@ -1,0 +1,515 @@
+{% extends "main.html" %}
+
+{% block title %}Celebrity Info{% endblock %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/names.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+
+<head>
+    <meta charset="UTF-16">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <div class="header-content">
+        <header class="header">
+            <h1>
+                {{ data['name_data']['originalName'] }} 
+                <span class="profession">( {{ data['name_data']['primaryProfession'] }})</span>
+            </h1>
+            <div class="crud-buttons">
+                <button id="openModalBtn"><i class="fas fa-add"></i></button> <!-- Delete button with trashcan icon -->
+                <a href="#personal-details">
+                    <button><i class="fas fa-pencil-alt"></i></button> <!-- Edit button with pencil icon -->
+                </a>
+                <button onClick = "deletePerson()"><i class="fas fa-trash"></i></button> <!-- Delete button with trashcan icon -->
+            </div>
+        </header>
+        <div class="description">
+            <img src="{{ url_for('static', filename='celebrities/' + image_path) }}" alt="Profile Image">
+                <div class="media-buttons">
+                    <div class="media-button">
+                        <i class="fas fa-video media-icon"></i> 
+                        <p class="media-text">(96) Videos</p>
+                    </div>
+                    <div class="media-button">
+                        <i class="fas fa-image media-icon"></i> 
+                        <p class="media-text">(102) Photos</p>
+                    </div>
+                </div>
+            <div class="text-content">
+                <p> {{ data['name_data']['originalName'] }} was born in Springfield and raised in Riverdale. They began their career in the entertainment industry after studying at an undisclosed university. With a passion for storytelling, {{ data['name_data']['originalName'] }} quickly made a name for themselves through their dedication and talent. Their early work included a variety of roles in both theater and television, where they honed their craft and garnered attention for their unique approach to performance. Over the years, {{ data['name_data']['originalName'] }} became known for their work in major projects, receiving widespread recognition for their versatility and ability to bring complex characters to life. With numerous accolades under their belt, {{ data['name_data']['originalName'] }} continues to be a prominent figure in the industry, known for their commitment to both their craft and various philanthropic causes.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to delete a single row
+    function deletePerson() {
+        const updatedData = {};
+        const fields = ["nconst"];
+        if (confirm("Are you sure you want to delete this person?")) {
+            // Extract nconst from the URL
+            const urlParts = window.location.pathname.split('/'); // Split the URL path
+            const nconst = urlParts[urlParts.length - 1]; // Get the last part of the path (nconst)
+
+            // Add the nconst to the updatedData
+            updatedData.nconst = nconst;
+
+            // Log the data for debugging
+            console.log("Updated data being sent:", updatedData);
+
+            // Send the updated data to the server
+            fetch('/delete_name_basics/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Delete successfully!");
+                    window.history.back();
+                } else {
+                    alert("Failed to delete");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while deleting.");
+            });
+        }
+    }
+    </script>
+
+    <!-- Modal Structure -->
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <!-- X Button to close the modal -->
+            <button id="closeModalBtn" class="fas fa-times"></button>
+
+            <h2>Enter Name Basics Information</h2>
+
+            <form id="nameBasicsForm">
+                <div>
+                    <label for="nconst">Nconst:</label>
+                    <input type="number" id="nconst" name="nconst" required>
+                </div>
+                <div>
+                    <label for="originalName">Original Name:</label>
+                    <input type="text" id="originalName" name="originalName" required>
+                </div>
+                <div>
+                    <label for="birthYear">Birth Year:</label>
+                    <input type="number" id="birthYear" name="birthYear" required>
+                </div>
+                <div>
+                    <label for="deathYear">Death Year (optional):</label>
+                    <input type="number" id="deathYear" name="deathYear">
+                </div>
+                <div>
+                    <label for="knownName">Known Name:</label>
+                    <input type="text" id="knownName" name="knownName" required>
+                </div>
+                <div>
+                    <label for="primaryProfession">Primary Profession (optional):</label>
+                    <input type="text" id="primaryProfession" name="primaryProfession">
+                </div>
+
+                <!-- Submit button (you can add functionality to this later) -->
+                <button type="submit">Submit</button>
+
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Get modal and buttons
+        var modal = document.getElementById("add-modal");
+        var openModalBtn = document.getElementById("openModalBtn");
+        var closeModalBtn = document.getElementById("closeModalBtn");
+        var okModalBtn = document.getElementById("okModalBtn");
+        var nameBasicsForm = document.getElementById("nameBasicsForm");
+
+        // Open modal when the "add" button is clicked
+        openModalBtn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // Close modal when the "X" button is clicked
+        closeModalBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // Close modal if the user clicks anywhere outside of the modal
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Handle form submission (this can be modified to send a request to your endpoint)
+        nameBasicsForm.onsubmit = async function (event) {
+            event.preventDefault();
+
+            // Get form data
+            var formData = new FormData(nameBasicsForm);
+
+            // Log form data (you can modify this to send the data to an endpoint)
+            var formValues = {};
+            formData.forEach((value, key) => {
+                formValues[key] = value;
+            });
+
+            console.log(JSON.stringify(formValues));
+
+            // Make a POST request to add the data
+            try {
+                const response = await fetch('/add_name_basics/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formValues)
+                });
+
+                // Check if the response is ok
+                if (!response.ok) {
+                    throw new Error("Failed to add new person data");
+                }
+
+                // Parse the response as JSON
+                const data = await response.json();
+
+                // Show success or error based on the response
+                if (data.success) {
+                    alert("New name_basics data added successfully!");
+                } else {
+                    alert("Failed to add: " + data.message);
+                }
+
+                // Close the modal after submission
+                modal.style.display = "none";
+
+            } catch (error) {
+                console.error("Error sending request:", error);
+                alert("An error occurred: " + error.message);
+            }
+
+        }
+    </script>
+
+    <div class= "known-for">
+        <h2 onclick="toggleKnownFor()">Known For</h2>
+        <div id="best-movies-wrapper" class="best-movies-wrapper">
+            <div id="best-movies-section" class="best-movies">
+                {% for movie in data['best_movies'] %}
+                <a href="/title/{{ movie['tconst'] }}" class="movie-card">
+                    <div class="movie-card-content">
+                        <img src="{{ url_for('static', filename='posters/poster' ~ loop.index ~ '.png') }}" 
+                             alt="Poster of {{ movie['originalTitle'] }}" 
+                             class="movie-poster">
+                        <div class="movie-info">
+                            <h3>{{ movie['originalTitle'] }}</h3>
+                            <p>Year: {{ movie['startYear'] }}</p>
+                            <p>Rating: <span class="rating-star">★</span> {{ movie['averageRating'] }}</p>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleKnownFor() {
+            const section = document.getElementById('best-movies-section');
+            section.classList.toggle('collapsed');
+        }
+    </script>
+
+    <div class= "Credits">
+        <h2>Credits</h2>
+        <p>All movies he was included in</p>
+
+        <!-- Actor Section -->
+        <div class="known-for">
+            <h3 onclick="toggleActor()">Actor</h3>
+            <div id="actor-section" class="movie-section">
+                {% for movie in data['actor_movies'] %}
+                <a href="/title/{{ movie['tconst'] }}" class="movie-card">
+                    <div class="movie-card-content">
+                        <img src="{{ url_for('static', filename='posters/poster' ~ loop.index ~ '.png') }}" 
+                            alt="Poster of {{ movie['title'] }}" 
+                            class="movie-poster">
+                        <div class="movie-info">
+                            <h3>{{ movie['title'] }}</h3>
+                            <p>Year: {{ movie['startYear'] }}</p>
+                            <p>Rating: <span class="rating-star">★</span> {{ movie['averageRating'] }}</p> <!-- Add rating here -->
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Director Section -->
+        <div class="known-for">
+            <h3 onclick="toggleDirector()">Director</h3>
+            <div id="director-section" class="movie-section">
+                {% for movie in data['director_movies'] %}
+                <a href="/title/{{ movie['tconst'] }}" class="movie-card">
+                    <div class="movie-card-content">
+                        <img src="{{ url_for('static', filename='posters/poster' ~ loop.index ~ '.png') }}" 
+                            alt="Poster of {{ movie['title'] }}" 
+                            class="movie-poster">
+                        <div class="movie-info">
+                            <h3>{{ movie['title'] }}</h3>
+                            <p>Year: {{ movie['startYear'] }}</p>
+                            <p>Rating: <span class="rating-star">★</span> {{ movie['averageRating'] }}</p> <!-- Add rating here -->
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Writer Section -->
+        <div class="known-for">
+            <h3 onclick="toggleWriter()">Writer</h3>
+            <div id="writer-section" class="movie-section">
+                {% for movie in data['writer_movies'] %}
+                <a href="/title/{{ movie['tconst'] }}" class="movie-card">
+                    <div class="movie-card-content">
+                        <img src="{{ url_for('static', filename='posters/poster' ~ loop.index ~ '.png') }}" 
+                            alt="Poster of {{ movie['title'] }}" 
+                            class="movie-poster">
+                        <div class="movie-info">
+                            <h3>{{ movie['title'] }}</h3>
+                            <p>Year: {{ movie['startYear'] }}</p>
+                            <p>Rating: <span class="rating-star">★</span> {{ movie['averageRating'] }}</p> <!-- Add rating here -->
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <script>
+            function toggleActor() {
+                const section = document.getElementById('actor-section');
+                section.classList.toggle('collapsed');
+            }
+
+            function toggleDirector() {
+                const section = document.getElementById('director-section');
+                section.classList.toggle('collapsed');
+            }
+
+            function toggleWriter() {
+                const section = document.getElementById('writer-section');
+                section.classList.toggle('collapsed');
+            }
+        </script>
+    </div>
+
+    <div class="Personal" id="personal-details">
+        <div class="detail">
+            <h2>Personal Details</h2>
+            <button class="editButton" onclick="edit()"><i class="fas fa-pencil-alt"></i></button> <!-- Edit button -->
+        </div>
+    
+        <div class="detail">
+            <p><strong>Name:</strong> 
+                <span id="nameField">{{ data['name_data']['originalName'] }}</span>
+                <input type="text" id="nameInput" class="editInput" value="{{ data['name_data']['originalName'] }}" style="display:none;">
+            </p>
+        </div>
+    
+        <div class="detail">
+            <p><strong>Known As:</strong> 
+                <span id="knownNameField">{{ data['name_data']['knownName'] }}</span>
+                <input type="text" id="knownNameInput" class="editInput" value="{{ data['name_data']['knownName'] }}" style="display:none;">
+            </p>
+        </div>
+    
+        <div class="detail">
+            <p><strong>Birth Year:</strong> 
+                <span id="birthYearField">{{ data['name_data']['birthYear'] }}</span>
+                <input type="text" id="birthYearInput" class="editInput" value="{{ data['name_data']['birthYear'] }}" style="display:none;">
+            </p>
+        </div>
+    
+        <div class="detail">
+            <p><strong>Death Year:</strong> 
+                <span id="deathYearField">{{ data['name_data']['deathYear'] if data['name_data']['deathYear'] is not none else 'None' }}</span>
+                <input type="text" id="deathYearInput" class="editInput" value="{{ data['name_data']['deathYear'] if data['name_data']['deathYear'] is not none else '' }}" style="display:none;">
+            </p>
+        </div>
+    
+        <div class="detail">
+            <p><strong>Primary Profession:</strong> 
+                <span id="professionField">{{ data['name_data']['primaryProfession'] if data['name_data']['primaryProfession'] is not none else 'None' }}</span>
+                <input type="text" id="professionInput" class="editInput" value="{{ data['name_data']['primaryProfession'] if data['name_data']['primaryProfession'] is not none else '' }}" style="display:none;">
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const editButton = document.querySelector(".editButton");
+        const nameField = document.getElementById("nameField");
+        const nameInput = document.getElementById("nameInput");
+        
+        const knownNameField = document.getElementById("knownNameField");
+        const knownNameInput = document.getElementById("knownNameInput");
+        
+        const birthYearField = document.getElementById("birthYearField");
+        const birthYearInput = document.getElementById("birthYearInput");
+        
+        const deathYearField = document.getElementById("deathYearField");
+        const deathYearInput = document.getElementById("deathYearInput");
+        
+        const professionField = document.getElementById("professionField");
+        const professionInput = document.getElementById("professionInput");
+        
+        // When the edit button is clicked
+        function edit() {
+            // Toggle visibility of the text fields and inputs
+            const fields = [nameField, knownNameField, birthYearField, deathYearField, professionField];
+            const inputs = [nameInput, knownNameInput, birthYearInput, deathYearInput, professionInput];
+        
+            fields.forEach((field, index) => {
+                field.style.display = field.style.display === "none" ? "block" : "none";
+                inputs[index].style.display = inputs[index].style.display === "none" ? "block" : "none";
+            });
+        
+            // Change the button to Save
+            editButton.innerHTML = `<i class="fas fa-save"></i>`;
+            editButton.setAttribute("onclick", "saveValues()"); // Set the onclick for save
+        }
+        
+        // Function to save and log the updated values
+        function saveValues() {
+            // Get the updated values from the input fields
+            const updatedData = {};
+            const fields = ["name", "knownName", "birthYear", "deathYear", "profession"];
+            
+            fields.forEach(field => {
+                const input = document.getElementById(`${field}Input`); // Use dynamic field names
+                updatedData[field] = input.value.trim(); // Get updated value from input field
+            });
+
+            // Extract nconst from the URL
+            const urlParts = window.location.pathname.split('/'); // Split the URL path
+            const nconst = urlParts[urlParts.length - 1]; // Get the last part of the path (nconst)
+            
+            // Add the nconst to the updatedData
+            updatedData.nconst = nconst;
+
+            // Log the data for debugging
+            console.log("Updated data being sent:", updatedData);
+
+            // Send the updated data to the server
+            fetch('/update_name_basics/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Changes saved successfully!");
+                    window.location.reload(); // Reload the page after successful update
+                } else {
+                    alert("Failed to save changes.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while saving the changes.");
+            });
+
+            // Change button back to Edit after saving
+            editButton.innerHTML = `<i class="fas fa-pencil-alt"></i>`;
+            editButton.setAttribute("onclick", "edit()"); // Reset onclick to edit
+        }
+    </script>
+    
+    <div id= "Worked With" class="known-for">
+        <h2 onclick="toggleKnownFor()">Worked With</h2>
+        <div id="best-movies-wrapper" class="best-movies-wrapper">
+            <div id="best-movies-section" class="best-movies">
+                {% for collaborator in data['collaborators'] %}
+                    {% for movie in data['best_movies'] %}
+                        {% if movie['tconst'] == collaborator['tconst'] %}
+                            <a href="/names/{{ collaborator['nconst'] }}" class="movie-card">
+                                <div class="movie-card-content">
+                                    <!-- Name and Role -->
+                                    <div class="movie-info">
+                                        <h3>{{ collaborator['personName'] }}</h3>
+                                        <p>
+                                            <!-- Movie Title -->
+                                            {{ collaborator['titleName'] }}
+                                        </p>
+                                        <p>
+                                            <!-- Role (Directed, Produced, or Played) -->
+                                            {% if collaborator['role'] == 'director' %}
+                                                (Directed)
+                                            {% elif collaborator['role'] == 'writer' %}
+                                                (Produced)
+                                            {% else %}
+                                                (Played as {{ collaborator['characterName'] }})
+                                            {% endif %}
+                                        </p>
+                                    </div>
+
+                                    <!-- Profile Picture -->
+                                    <img src="https://xsgames.co/randomusers/avatar.php?g={{ ['male', 'female']|random }}&rand={{ collaborator['nconst'] }}" 
+                                    alt="Profile of {{ collaborator['personName'] }}" 
+                                    class="movie-poster">
+                                </div>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class= "More">
+        <h2>People Also Search For</h2>
+        <p>Explore more here </p>
+    
+        <div class="scroll-container">
+            <button class="scroll-arrow left">&#10094;</button>
+    
+            <div class="cards-container">
+                {% for person in data['other_people'] %}
+                    <a href="/names/{{ person['nconst'] }}" class="person-card">
+                        <div class="card-content">
+                            <!-- Dynamic image selection based on loop index -->
+                            <img src="{{ url_for('static', filename='celebrities/indir (' ~ loop.index0 ~ ').jpeg') }}" 
+                                 alt="Image of {{ person['knownName'] }}" class="person-image">
+                            <div class="name-overlay">
+                                <p>{{ person['knownName'] }}</p>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+    
+            <button class="scroll-arrow right">&#10095;</button>
+        </div>
+        <div class = "edit page">
+            <h2> Contribute to this page </h2>
+            <p> Edit this Page locally </p>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

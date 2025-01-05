@@ -1,0 +1,201 @@
+{% extends "main.html" %}
+
+{% block title %}Welcome to the Media Database{% endblock %}
+
+{% block content %}
+{% block extra_styles %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #ffffff;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        margin-top: 50px;
+        text-align: center; /* Ensure the heading is centered */
+    }
+
+    .button-container {
+        margin-top: 30px;
+    }
+
+    .add-button {
+        display: inline-block;
+        margin: 15px;
+        padding: 15px 30px;
+        font-size: 18px;
+        color: white;
+        text-decoration: none;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .add-button:hover {
+        background-color: #0056b3;
+    }
+
+    .info-section {
+        margin-top: 50px;
+        font-size: 18px;
+        color: #555;
+    }
+
+    .info-section a {
+        color: #007bff;
+        text-decoration: none;
+    }
+    .info-section a:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+<h1>Welcome to the Media Database</h1>
+
+<div class="info-section">
+    <p>Manage titles and names in the database by choosing one of the options below.</p>
+    <p>Click on the buttons to add records to either the <strong>Title Basics</strong> table or the <strong>Name Basics</strong> table.</p>
+</div>
+
+<div class="button-container">
+    <button class="add-button" onclick="navigateTo('/add_title_basics_page')">Add to Title Basics</button>
+    <button id="openModalBtn" class="add-button">Add to Name Basics</button>
+</div>
+
+
+<!-- Modal Structure -->
+<div id="add-modal" class="modal">
+    <div class="modal-content">
+        <!-- X Button to close the modal -->
+        <button id="closeModalBtn" class="fas fa-times"></button>
+
+        <h2>Enter Name Basics Information</h2>
+
+        <form id="nameBasicsForm">
+            <div>
+                <label for="nconst">Nconst:</label>
+                <input type="number" id="nconst" name="nconst" required>
+            </div>
+            <div>
+                <label for="originalName">Original Name:</label>
+                <input type="text" id="originalName" name="originalName" required>
+            </div>
+            <div>
+                <label for="birthYear">Birth Year:</label>
+                <input type="number" id="birthYear" name="birthYear" required>
+            </div>
+            <div>
+                <label for="deathYear">Death Year (optional):</label>
+                <input type="number" id="deathYear" name="deathYear">
+            </div>
+            <div>
+                <label for="knownName">Known Name:</label>
+                <input type="text" id="knownName" name="knownName" required>
+            </div>
+            <div>
+                <label for="primaryProfession">Primary Profession (optional):</label>
+                <input type="text" id="primaryProfession" name="primaryProfession">
+            </div>
+
+            <!-- Submit button (you can add functionality to this later) -->
+            <button type="submit">Submit</button>
+
+        </form>
+    </div>
+</div>
+
+<script>
+    // Get modal and buttons
+    var modal = document.getElementById("add-modal");
+    var openModalBtn = document.getElementById("openModalBtn");
+    var closeModalBtn = document.getElementById("closeModalBtn");
+    var okModalBtn = document.getElementById("okModalBtn");
+    var nameBasicsForm = document.getElementById("nameBasicsForm");
+
+// Open modal when the "add" button is clicked
+openModalBtn.onclick = function() {
+modal.style.display = "block";
+}
+
+// Close modal when the "X" button is clicked
+closeModalBtn.onclick = function() {
+modal.style.display = "none";
+}
+
+// Close modal if the user clicks anywhere outside of the modal
+window.onclick = function(event) {
+if (event.target == modal) {
+    modal.style.display = "none";
+}
+}
+
+// Handle form submission (this can be modified to send a request to your endpoint)
+nameBasicsForm.onsubmit = async function (event) {
+event.preventDefault();
+
+// Get form data
+var formData = new FormData(nameBasicsForm);
+
+// Log form data (you can modify this to send the data to an endpoint)
+var formValues = {};
+formData.forEach((value, key) => {
+    formValues[key] = value;
+});
+
+console.log(JSON.stringify(formValues));
+
+// Make a POST request to add the data
+try {
+    const response = await fetch('/add_name_basics/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formValues)
+    });
+
+    // Check if the response is ok
+    if (!response.ok) {
+        throw new Error("Failed to add new person data");
+    }
+
+    // Parse the response as JSON
+    const data = await response.json();
+
+    // Show success or error based on the response
+    if (data.success) {
+        alert("New name_basics data added successfully!");
+    } else {
+        alert("Failed to add: " + data.message);
+    }
+
+    // Close the modal after submission
+    modal.style.display = "none";
+
+} catch (error) {
+    console.error("Error sending request:", error);
+    alert("An error occurred: " + error.message);
+}
+
+}
+</script>
+
+
+<!-- You can add more content sections here -->
+<div class="info-section">
+    <p>Or explore the database by clicking the links in the navigation bar.</p>
+</div>
+
+<script>
+    function navigateTo(path) {
+        window.location.href = path;
+    }
+</script>
+
+{% endblock %}

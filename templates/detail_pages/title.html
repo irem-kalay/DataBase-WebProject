@@ -1,0 +1,233 @@
+{% extends "main.html" %}
+
+{% block title %}Media Info{% endblock %}
+
+{% block extra_styles %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container-detail {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .title-info-detail, .cast-info-detail, .aka-info-detail {
+            margin-bottom: 20px;
+        }
+        .title-info-detail h2, .cast-info-detail h3, .aka-info-detail h3 {
+            color: #4a6e8a;
+        }
+
+        /* Table Styles */
+        .info-table-detail, .cast-table-detail, .aka-table-detail {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            max-width: 200px;  
+            overflow: hidden;
+        }
+        .info-table-detail th, .cast-table-detail th, .aka-table-detail th {
+            padding: 6px 8px; 
+            text-align: left;
+            background-color: #f8f8f8;
+            color: #4a6e8a;
+            border-bottom: 2px solid #ddd;
+            width: 200px; 
+            white-space: nowrap; 
+            word-wrap: break-word;
+        }
+        .info-table-detail td, .cast-table-detail td, .aka-table-detail td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            word-wrap: break-word; 
+            min-width: 600px;
+            width: 600px;
+            max-width: 600px;
+            
+        }
+        .cast-table-detail td, .aka-table-detail td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            word-wrap: break-word; 
+            min-width: 200px;
+            width: 200px;
+            max-width: 200px;
+        }
+
+        .info-table-detail tr:nth-child(even), .cast-table-detail tr:nth-child(even), .aka-table-detail tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .info-table-detail tr:hover, .cast-table-detail tr:hover, .aka-table-detail tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        table th {
+            background-color: #ddd;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            padding: 10px 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        table th, table td {
+            text-align: left;
+            border: 1px solid #ddd;
+            word-wrap: break-word;
+            overflow: hidden;
+            max-height: 200px;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        /* Additional Styles for Cast and Aka Information */
+        .cast-info-detail, .aka-info-detail {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        a {
+            color:#4a6e8a; /* Set link color */
+            text-decoration: none; /* Remove underline */
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+<body>
+
+<div class="container-detail">
+    <!-- Title Information -->
+    <div class="title-info-detail">
+        <h2>{{ movie.title }} ({{ movie.start_year }} - {{ movie.end_year }})</h2>
+        <table class="info-table-detail">
+            <tr>
+                <th>Tconst</th>
+                <td>{{ movie.tconst }}</td>
+            </tr>
+            <tr>
+                <th>Title Type</th>
+                <td>{{ movie.title_type }}</td>
+            </tr>
+            <tr>
+                <th>Adult</th>
+                <td>{{ 'Yes' if movie.is_adult else 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Genre</th>
+                <td>{{ movie.genre }}</td>
+            </tr>
+            <tr>
+                <th>Director</th>
+                <td>{{ movie.director_name }}</td>
+            </tr>
+            <tr>
+                <th>Writer</th>
+                <td>{{ movie.writer_name }}</td>
+            </tr>
+            <tr>
+                <th>Average Rating</th>
+                <td>{{ movie.average_rating }}</td>
+            </tr>
+            <tr>
+                <th>Number of Votes</th>
+                <td>{{ movie.num_votes }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Cast Information -->
+    <div class="cast-info-detail">
+        <h3>Cast</h3>
+        <table class="cast-table-detail">
+            <thead>
+                <tr>
+                    <th>Character Name</th>
+                    <th>Actor Name</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cast_member in movie.cast %}
+                <tr>
+                    <td><a href="/names/{{cast_member['nconst']}}">{{ cast_member.character_name }}</a></td>
+                    <td>{{ cast_member.original_name }}</td>
+                    <td>{{ cast_member.category }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Aka Information -->
+    <div class="aka-info-detail">
+        <h3>Aka Titles</h3>
+        <table class="aka-table-detail">
+            <thead>
+                <tr>
+                    <th>Aka Title</th>
+                    <th>Country</th>
+                    <th>Original</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for aka in movie.aka %}
+                <tr>
+                    <td>{{ aka.aka_title }}</td>
+                    <td>{{ aka.aka_country }}</td>
+                    <td>{{ 'Yes' if aka.aka_is_original else 'No' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if movie.title_type == 'tv_series' %}
+    <div class="episodes-info-detail">
+        <h3>Episodes</h3>
+        <table class="episodes-table-detail">
+            <thead>
+                <tr>
+                    <th>Season Number</th>
+                    <th>Episode Number</th>
+                    <th>Episode Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for episode in movie.episodes %}
+                <tr>
+                    <td>{{ episode.season_number }}</td>
+                    <td>{{ episode.episode_number }}</td>
+                    <td>{{ episode.episode_title }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% elif movie.title_type == 'tv_episode' %}
+    <div class="parent-tv-series-info-detail">
+        <h3>Parent TV Series</h3>
+        <p>Parent TV Series Tconst: <a href="/movies/{{ movie.parent_tconst }}">{{ movie.parent_tconst }}</a></p>
+    </div>
+{% endif %}
+
+
+</div>
+
+</body>
+
+{% endblock %}

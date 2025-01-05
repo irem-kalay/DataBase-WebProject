@@ -1,0 +1,69 @@
+{% extends "main.html" %}
+
+{% block title %}Update Movie Details{% endblock %}
+
+{% block extra_styles %}
+
+{% endblock %}
+
+{% block content %}
+<h1>Update Movie Details for {{ result.id }}</h1>
+<p>rating missing</p>
+<form method="POST" action="/rating_add/{{ result.id }}">
+    <div>
+        <label for="rating">Rating:</label>
+        <input 
+            type="number" 
+            step="0.01" 
+            id="rating" 
+            name="rating" 
+            value="{{ rating if rating else '' }}" 
+            placeholder="Enter rating">
+    </div>
+    <div>
+        <label for="votes">Number of Votes:</label>
+        <input 
+            type="number" 
+            id="votes" 
+            name="votes" 
+            value="{{ votes if votes else '' }}" 
+            placeholder="Enter number of votes">
+    </div>
+    <button type="submit">Add Rating</button>
+</form>
+
+<form method="POST" action="/aka_update/{{ result.id }}">
+    <div>
+        <h2>Alternate Titles (Akas)</h2>
+        {% for aka in result.akas %}
+            <div class="aka-entry">
+                <label for="aka_title_{{ loop.index }}">Title (Aka #{{ loop.index }}):</label>
+                <input 
+                    type="text" 
+                    id="aka_title_{{ loop.index }}" 
+                    name="akas[{{ loop.index }}][title]" 
+                    value="{{ aka.title }}">
+                <label for="aka_country_{{ loop.index }}">Country:</label>
+                <input 
+                    type="text" 
+                    id="aka_country_{{ loop.index }}" 
+                    name="akas[{{ loop.index }}][country]" 
+                    value="{{ aka.country }}">
+                <label for="aka_isOriginal_{{ loop.index }}">Is Original?</label>
+                <input 
+                    type="checkbox" 
+                    id="aka_isOriginal_{{ loop.index }}" 
+                    name="akas[{{ loop.index }}][isOriginal]" 
+                    {% if aka.isOriginal %}checked{% endif %}>
+            </div>
+
+            <form method="POST" action="/delete_aka/{{ result.id }}/{{ loop.index }}">
+                <button type="submit">Delete Aka #{{ loop.index }}</button>
+            </form>
+        {% endfor %}
+    </div>
+
+    <button type="submit">Update</button>
+</form>
+
+{% endblock %}

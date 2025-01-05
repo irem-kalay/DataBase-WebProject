@@ -1,0 +1,482 @@
+{% extends "main.html" %}
+
+{% block title %}Directors{% endblock %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include jQuery UI for Autocomplete -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<!-- Body tag with dynamic class based on current page -->
+<body class="{% if request.path == '/tv_series' %}tv-series-page{% elif request.path == '/movies' %}movies-page{% elif request.path == '/directors' %}directors-page{% elif request.path == '/actors' %}actors-page{% endif %}">
+
+    <div class="form-container">
+        <!-- Filter and Sort Form -->
+        <form class="filter-form" method="GET" action="/directors" onsubmit="return validateFilterForm()">
+                
+            <!-- Rating condition dropdown -->
+            <label for="rating_condition" class="filter-label"></label>
+            <select name="rating_condition" id="rating_condition">
+                <option value="none" selected>Condition</option> <!-- Option to leave the rating filter empty -->
+                <option value="equal">Equal</option>
+                <option value="greater">Greater Than</option>
+                <option value="less">Less Than</option>
+            </select>
+            <input type="number" step="0.01" min="0" max="5" name="rating" id="rating" placeholder="Rating (0-5)">
+
+            <!-- Year condition dropdown -->
+            <label for="year_condition" class="filter-label"></label>
+            <select name="year_condition" id="year_condition">
+                <option value="none" selected>Condition</option> <!-- Option to leave the year filter empty -->
+                <option value="equal">Equal</option>
+                <option value="greater">Greater Than</option>
+                <option value="less">Less Than</option>
+            </select>
+            <input type="number" min="1900" max="2099" step="1" name="year" id="year" placeholder="Year (e.g., 2023)">
+
+            <label for="filter_by"></label>
+            <select name="filter_by" id="filter_by" onchange="updatePlaceholder()">
+                <option value="" disabled selected>Search By:</option>
+                <option value="tb.title">Production</option>
+                <option value="nb.originalName">Director</option>
+                <option value="wb.originalName">Writer</option>
+                <option value="tb.tconst">Production ID</option>
+                <option value="nb.nconst">Director ID</option>
+                <option value="wb.nconst">Writer ID</option>
+            </select>
+            <input type="text" name="filter_value" id="filter_value" placeholder="Search">
+        
+            <label for="sort_by"></label>
+            <select name="sort_by" id="sort_by">
+                <option value="" disabled selected>Sort By:</option>
+                <option value="tb.title">Production</option>
+                <option value="nb.originalName">Director</option>
+                <option value="wb.originalName">Writer</option>
+                <option value="tb.startYear">Year</option>
+                <option value="tr.averageRating">Rating</option>
+                <option value="tb.tconst">Production ID</option>
+                <option value="nb.nconst">Director ID</option>
+                <option value="wb.nconst">Writer ID</option>
+            </select>
+            
+            <button type="submit" class="main-btn">Apply</button>
+
+        </form>
+
+        <!-- Delete Selected Button -->
+        <button class="main-btn" id="deleteSelectedBtn">Delete</button>
+        <button class="main-btn" id="addNewBtn">Add</button>
+    </div>
+
+    <!-- Table for Displaying Directors -->
+    <div class="scrollable-table">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 5%;">
+                        <input type="checkbox" id="selectAll" onclick="toggleSelectAll(this)" title="Select All">
+                    </th>
+                    <th style="width: 20%;">Production Title</th>
+                    <th style="width: 4%;">tconst</th>
+                    <th style="width: 14%;">Directors Name</th>
+                    <th style="width: 4%;">Directors nconcst</th>
+                    <th style="width: 14%;">Writers Name</th>
+                    <th style="width: 4%;">Writers nconst</th>
+                    <th style="width: 15%;">Year Produced</th>
+                    <th style="width: 5%;">Rating</th>
+                    <th style="width: 20%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for director in directors %}
+                <tr id="row_{{ director.directorNconst }}">
+                    <td>
+                        <input type="checkbox" name="selected_directors" value="{{ director.tconst }}|{{ director.directorNconst }}">
+                    </td>
+                    <!-- Editable Production Title (with link) -->
+                    <td id="productionTitle_{{ director.directorNconst }}">
+                        <a href="/title/{{ director.tconst }}" class="table-link">{{ director.title }}</a>
+                        <input type="text" class="production-title-input" value="{{ director.title }}" style="display:none;">
+                    </td>
+
+                    <td id="tconst_{{ director.directorNconst }}">
+                        <a href="/title/{{ director.tconst }}" class="table-link">{{ director.tconst }}</a>
+                        <input type="hidden" id="edit_tconst_{{ director.directorNconst }}" value="{{ director.tconst }}">
+                    </td>
+
+                    <!-- Editable Director's Name (with link) -->
+                    <td id="directorName_{{ director.directorNconst }}">
+                        <a href="/names/{{ director.directorNconst }}" class="table-link">{{ director.directorName }}</a>
+                        <input type="text" class="director-name-input" value="{{ director.directorName }}" style="display:none;">
+                    </td>
+
+                    <!-- Editable Director's Name (with link) -->
+                    <td id="directornconst_{{ director.directorNconst }}">
+                        <a href="/names/{{ director.directorNconst }}" class="table-link">{{ director.directorNconst }}</a>
+                        <input type="text" class="director-name-input" value="{{ director.directorName }}" style="display:none;">
+                    </td>
+
+                    <!-- Editable Writer's Name -->
+                    <td id="writerName_{{ director.directorNconst }}">
+                        <a href="/names/{{ director.writerNconst }}" class="table-link">{{ director.writerName if director.writerName else "N/A" }}</a>
+                        <input type="text" class="writer-name-input" value="{{ director.writerName }}" style="display:none;">
+                    </td>
+
+                    <!-- Editable Writer's Name -->
+                    <td id="writernconst_{{ director.directorNconst }}">
+                        <a href="/names/{{ director.writerNconst }}" class="table-link">{{ director.writerNconst if director.writerNconst else "N/A" }}</a>
+                        <input type="text" class="writer-name-input" value="{{ director.writerName }}" style="display:none;">
+                    </td>
+
+                    <!-- Editable Year Directed -->
+                    <td id="yearDirected_{{ director.directorNconst }}">{{ director.yearDirected }}</td>
+                    
+                    <!-- Editable Rating -->
+                    <td id="rating_{{ director.directorNconst }}">{{ director.rating if director.rating else "N/A" }}</td>
+
+                    <td>
+                        <!-- Buttons with icons -->
+                        <a href="javascript:void(0)" class="button see-more-btn" onclick="window.location='/crew_and_cast/{{ director.directorNconst }}'"><i class="fas fa-ellipsis-h"></i></a>
+                        <a href="javascript:void(0)" class="button edit-btn" onclick="editRow('{{ director.directorNconst }}', '{{ director.tconst }}')"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="javascript:void(0)" class="button delete-btn" onclick="deleteRow('{{ director.tconst }}', '{{ director.directorNconst }}')"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+<!-- POP-UP MODAL -->
+<div id="addDirectorModal" class="modal">
+    <div class="modal-content">
+        <h2>Add New Movie Director-Writer Relation</h2>
+
+        <!-- Dropdown for tconst -->
+        <label for="tconstDropdown">Choose a movie (tconst):</label>
+        <select id="tconstDropdown">
+            <option value="" disabled selected>Loading...</option>
+        </select>
+
+        <!-- Input field for first nconst (Director) -->
+        <label for="nconstField1">Enter Director nconst:</label>
+        <input type="text" id="nconstField1" placeholder="Enter Director nconst">
+
+        <!-- Input field for second nconst (Writer) -->
+        <label for="nconstField2">Enter Writer nconst:</label>
+        <input type="text" id="nconstField2" placeholder="Enter Writer nconst">
+
+        <!-- OK Button -->
+        <button id="okButton">OK</button>
+    </div>
+</div>
+
+<script>
+    function validateFilterForm() {
+    var filterBy = document.getElementById('filter_by').value;
+    var filterValue = document.getElementById('filter_value').value;
+    var rating = document.getElementById('rating').value;
+    var ratingCondition = document.getElementById('rating_condition').value;
+    var year = document.getElementById('year').value;
+    var yearCondition = document.getElementById('year_condition').value;
+
+    // If the rating is provided, check for valid range
+    if (rating && (rating < 0 || rating > 5)) {
+        alert('Rating must be between 0 and 5.');
+        return false;  // Prevent form submission
+    }
+
+    // If the year is provided, check for valid format
+    if (year && (year.length !== 4 || isNaN(year))) {
+        alert('Year must be a 4-digit number.');
+        return false;  // Prevent form submission
+    }
+
+    // Additional validation for filter by selection and filter value
+    if (filterBy && filterValue) {
+        // Check if a valid filter is selected
+        var validFilters = [
+            'tb.title', 'nb.originalName', 'wb.originalName', 'tb.tconst', 'nb.nconst', 'wb.nconst'
+        ];
+        if (!validFilters.includes(filterBy)) {
+            alert('Invalid filter selection.');
+            return false;
+        }
+
+        // If filtering by ID, ensure the value is valid
+        if (filterBy === 'tb.tconst' || filterBy === 'nb.nconst' || filterBy === 'wb.nconst') {
+            if (!filterValue.match(/^[a-zA-Z0-9]+$/)) {
+                alert('Invalid ID format. Please provide a valid alphanumeric ID.');
+                return false;
+            }
+        }
+    }
+
+    // Additional validation for sorting options
+    var validSortOptions = [
+        'tb.title', 'nb.originalName', 'wb.originalName', 'tb.startYear', 'tr.averageRating', 'tb.tconst', 'nb.nconst', 'wb.nconst'
+    ];
+    if (sortBy && !validSortOptions.includes(sortBy)) {
+        alert('Invalid sort option selected.');
+        return false;
+    }
+
+    // Return true to allow form submission regardless of whether filters are applied
+    return true;
+}
+</script>
+
+
+<script>
+    // Function to open the modal and fetch data
+    async function openAddModal() {
+        const modal = document.getElementById("addDirectorModal");
+        modal.style.display = "flex"; // Display the modal as a flexbox
+
+        try {
+            // Fetch data for dropdowns and wait for the response
+            const response = await fetch('/fetch_movies_for_add');
+
+            // Check if the response is ok
+            if (!response.ok) {
+                throw new Error("Failed to fetch data");
+            }
+
+            // Parse the response as JSON
+            const data = await response.json();
+
+            // Populate the dropdown with movie data (tconst values)
+            populateDropdown("tconstDropdown", data.tconsts);
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            alert("Failed to load data for dropdowns.");
+        }
+    }
+
+    // Function to close the modal
+    function closeAddModal() {
+        const modal = document.getElementById("addDirectorModal");
+        modal.style.display = "none"; // Hide the modal
+    }
+
+    // Function to populate dropdowns with data
+    function populateDropdown(dropdownId, items) {
+        const dropdown = document.getElementById(dropdownId);
+        dropdown.innerHTML = ''; // Clear existing options
+
+        // Add a default placeholder option
+        const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        defaultOption.textContent = "Select an option";
+        dropdown.appendChild(defaultOption);
+
+        // Add fetched data as options
+        items.forEach(item => {
+            const option = document.createElement("option");
+            option.value = item.id; // Use the ID as the value
+            option.textContent = item.label; // Display the label
+            dropdown.appendChild(option);
+        });
+    }
+
+    // Add event listener to the "OK" button
+    document.getElementById("okButton").addEventListener("click", async function () {
+        const tconst = document.getElementById("tconstDropdown").value;  // Get tconst value
+        const nconst1 = document.getElementById("nconstField1").value;  // Get Director nconst value
+        const nconst2 = document.getElementById("nconstField2").value;  // Get Writer nconst value
+
+        // Log the values to the console
+        console.log("tconst:", tconst);
+        console.log("Director nconst:", nconst1);
+        console.log("Writer nconst:", nconst2);
+
+        // Make a POST request to add the data
+        try {
+            const response = await fetch('/add_director_writer_relation/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    tconst: tconst,
+                    nconst1: nconst1,
+                    nconst2: nconst2
+                })
+            });
+
+            // Check if the response is ok
+            if (!response.ok) {
+                throw new Error("Failed to add director-writer relation");
+            }
+
+            // Parse the response as JSON
+            const data = await response.json();
+
+            // Show success or error based on the response
+            if (data.success) {
+                alert("Director-Writer relation added successfully!");
+            } else {
+                alert("Failed to add relation: " + data.message);
+            }
+
+            // Close the modal after the operation
+            closeAddModal();
+
+        } catch (error) {
+            console.error("Error sending request:", error);
+            alert("An error occurred: " + error.message);
+        }
+    });
+
+    // Call the function to open the modal when the "Add New" button is clicked (or wherever you want to trigger the modal)
+    document.getElementById("addNewBtn").addEventListener("click", function () {
+        openAddModal();  // Open the modal
+    });
+
+    // Add event listener to close the modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById("addDirectorModal");
+        if (event.target === modal) {
+            closeAddModal(); // Close modal if clicked outside
+        }
+    }
+
+</script>
+
+<script>
+    function editRow(directorNconst, tconst) {
+    const row = document.getElementById(`row_${directorNconst}`);
+
+    // Updated fields array (excluding tconst from editable fields)
+    const fields = ["productionTitle", "directorName", "directornconst", "writerName", "writernconst", "yearDirected", "rating"];
+    fields.forEach(field => {
+        const cell = row.querySelector(`#${field}_${directorNconst}`);
+        if (cell) {
+            const currentValue = cell.innerText.trim(); // Get current value
+            cell.innerHTML = `<input type="text" id="edit_${field}_${directorNconst}" value="${currentValue}">`; // Make editable
+        }
+    });
+
+    // Replace the edit button with a save button
+    const editBtn = row.querySelector('.edit-btn');
+    editBtn.innerHTML = `<i class="fas fa-save"></i>`;
+    editBtn.setAttribute("onclick", `saveRow('${directorNconst}', '${tconst}')`);
+}
+
+function saveRow(directorNconst, tconst) {
+    const row = document.getElementById(`row_${directorNconst}`);
+
+    // Gather updated values
+    const updatedData = { tconst }; // Include tconst directly
+    const fields = ["productionTitle", "directorName", "directornconst", "writerName", "writernconst", "yearDirected", "rating"];
+    fields.forEach(field => {
+        const input = row.querySelector(`#edit_${field}_${directorNconst}`);
+        if (input) {
+            updatedData[field] = input.value.trim(); // Get updated value
+        } else {
+            console.error(`Input field not found for field: ${field}`);
+        }
+    });
+
+    // Log the data for debugging
+    console.log("Updated data being sent:", updatedData);
+
+    // Send the updated data to the server
+    fetch('/update_director/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedData),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Changes saved successfully!");
+                window.location.reload();
+            } else {
+                alert("Failed to save changes: " + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("An error occurred while saving the changes.");
+        });
+}
+</script>
+
+<script>
+    // Function to toggle all checkboxes when 'Select All' is clicked
+    function toggleSelectAll(selectAllCheckbox) {
+        const checkboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = selectAllCheckbox.checked;
+        });
+    }
+
+    // Function to delete a single row
+    function deleteRow(tconst, directorNconst) {
+        if (confirm("Are you sure you want to delete this director?")) {
+            fetch(`/delete_director/${tconst}/${directorNconst}`, { method: 'DELETE' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        const row = document.getElementById(`row_${directorNconst}`);
+                        if (row) row.remove();
+                    } else {
+                        alert(data.error || "An error occurred.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while deleting the director.");
+                });
+        }
+    }
+
+    // Function to delete selected rows
+    document.getElementById("deleteSelectedBtn").addEventListener("click", function () {
+        const selectedDirectors = Array.from(document.querySelectorAll('input[name="selected_directors"]:checked'))
+            .map(checkbox => checkbox.value);
+
+        if (selectedDirectors.length === 0) {
+            alert("Please select at least one director to delete.");
+            return;
+        }
+
+        if (confirm("Are you sure you want to delete the selected directors?")) {
+            fetch('/delete_selected_directors_route', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ selectedDirectors: selectedDirectors }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        selectedDirectors.forEach(value => {
+                            const directorNconst = value.split('|')[1];
+                            const row = document.getElementById(`row_${directorNconst}`);
+                            if (row) row.remove();
+                        });
+                    } else {
+                        alert(data.error || "An error occurred.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while deleting directors.");
+                });
+        }
+    });
+</script>
+
+</body>
+{% endblock %}

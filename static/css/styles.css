@@ -1,0 +1,687 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9; /* Light neutral background */
+}
+
+main {
+    padding: 30px;
+    padding-top: 0px;
+}
+
+h1 {
+    color: #163959;
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-align: center;
+    width: fit-content;
+    margin: 50px auto 0;
+}
+
+/* Button Styles */
+.add-btn, .filter-field-btn {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: rgb(22, 57, 89);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: auto; /* Prevent taking the entire width */
+    max-width: 100px; /* Limit maximum width */
+}
+
+.add-btn:hover, .filter-field-btn:hover {
+    background-color: #3a5569;
+    transform: translateY(-1px);
+}
+
+
+/* Input Fields Styling */
+input[type="text"], select {
+    background-color: #ffffff;
+    border: 1px solid #ddd; /* Thin gray outline */
+    border-radius: 20px; /* Rounded corners */
+    padding: 10px 15px;
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 16px;
+    max-width: 150px; /* Limit maximum width */
+    color: #333; /* Dark text color */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle inner shadow */
+}
+
+input[type="text"]::placeholder {
+    color: rgb(22, 57, 89); /* Subtle placeholder text */
+}
+
+select {
+    background-color: rgb(22, 57, 89); /* Dropdown background */
+    color: white; /* White text inside the dropdown */
+    border: 1px solid #ddd; /* Thin gray outline */
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 16px;
+    max-width: 150px; /* Limit maximum width */
+}
+
+/* Apply Button */
+button.main-btn {
+    background-color: rgb(22, 57, 89); /* Apply button background */
+    color: white; /* Apply button text color */
+    border: none;
+    border-radius: 25px; /* Rounded corners */
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100px; /* Limit maximum width */
+    height: 40px;
+}
+
+button.main-btn:hover {
+    background-color: rgb(22, 57, 89); /* Darker shade on hover */
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Navbar styling */
+nav {
+    display: flex;
+    justify-content: space-between; /* Ensures space between brand and links */
+    align-items: flex-start; /* Align items to the top */
+    padding: 10px 20px; /* Increased padding */
+    padding-left: 0px;
+    padding-right: 60px;
+    background-color: transparent; /* Make the navbar background transparent */
+    position: sticky; /* Keep navbar fixed at the top */
+    top: 0; /* Ensure it stays at the top */
+    z-index: 1000; /* Make sure the navbar stays above other content */
+    font-family: sans-serif;
+}
+
+/* Remove hover effect from brand links */
+.brand-link {
+    text-decoration: none; /* Remove underline */
+    display: flex; /* Ensure the elements are in a row */
+    flex-direction: column; /* Stack the "IMDB" and "SQL Database" vertically */
+    justify-content: flex-start; /* Align items to the top */
+    align-items: flex-start; /* Align items to the left */
+}
+
+.brand-container {
+    padding-left: 0px;
+    display: flex;
+    flex-direction: column; /* Stack the "IMDB" and "SQL Database" vertically */
+    justify-content: flex-start; /* Align items to the top */
+    align-items: flex-start; /* Align items to the left */
+    margin-right: 40px; /* Increased space between brand and links */
+}
+
+.brand {
+    font-size: 50px; /* Large text size for "IMDB" */
+    color: rgb(22, 57, 89);
+    font-weight: bold;
+    margin: 0;
+    letter-spacing: 10px; /* Adjust the value to control the spacing between letters */
+}
+
+.sub-brand {
+    font-size: 30px; /* Smaller size for "SQL Database" */
+    color: rgb(22, 57, 89);
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center; /* Center the links horizontally */
+    align-items: flex-start; /* Align the links to the top */
+    flex-grow: 1; /* Take up remaining space between brand and edge */
+    padding-top: 10px; /* Reduced padding */
+}
+
+.separator {
+    color: rgb(22, 57, 89);
+    margin: 0 10px;
+    font-size: 20px;
+    font-weight: 100;
+}
+
+nav a {
+    color: rgb(22, 57, 89); /* Indigo-turquoise color */
+    text-decoration: none;
+    padding: 0px 20px; /* Increased padding between links */
+    margin-left: 10px; /* Increased space between items */
+    margin-right: 10px; /* Increased space between items */
+    font-size: 23px; /* Slightly bigger text size */
+    border-radius: 10px; /* Rounded rectangle */
+    transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+    background-color: rgb(22, 57, 89);
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 7px 20px;
+}
+
+/* Custom styles for each page */
+body.tv-series-page .nav-links a[href='/tv_series'],
+body.movies-page .nav-links a[href='/movies'],
+body.directors-page .nav-links a[href='/directors'],
+body.actors-page .nav-links a[href='/actors'] {
+    background-color: rgb(22, 57, 89);
+    color: white;
+    padding: 7px 20px; /* Keep the padding the same as when hovered */
+}
+
+
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+}
+
+
+table th, table td {
+    text-align: left;
+    border: 1px solid #ddd;
+    word-wrap: break-word; /* Prevent text overflow */
+    overflow: hidden;      /* Hide any overflow content */
+    max-height: 200px; /* Adjust as needed */
+    font-family: 'Arial', sans-serif; /* Set the font for the cells */
+    font-size: 14px; /* Set the font size for the text */
+    color: #333; /* Set the text color */
+    line-height: 1.5; /* Set line height for readability */
+}
+
+/* Table Header Styles */
+table th {
+    background-color: rgb(22, 57, 89);
+    color: white;
+    font-weight: bold;
+    font-size: 18px; /* Increase font size for table headers */
+    padding: 10px 10px; /* Add padding around the header text */
+    text-align: center; /* Center the header text */
+    border: 1px solid #ddd; /* Keep border around the header */
+    position: sticky; /* Make the header stick to the top */
+    top: 0; /* Stick to the top of the table */
+    z-index: 1; /* Ensure the header is above the table body */
+}
+
+/* Table Header Styles */
+table th {
+    background-color: rgb(22, 57, 89);
+    color: white;
+    font-weight: bold;
+    font-size: 16px; /* Increase font size for table headers */
+    padding: 10px 10px; /* Add padding around the header text */
+    text-align: center; /* Center the header text */
+    border: 1px solid #ddd; /* Keep border around the header */
+    position: sticky; /* Make the header stick to the top */
+    top: 0; /* Stick to the top of the table */
+    z-index: 1; /* Ensure the header is above the table body */
+}
+
+table tbody tr {
+    background-color: #f7f7f7;
+}
+
+/* Hover Effect on Table Cells */
+table tbody tr td {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease; /* Animation on transform, shadow, and color */
+}
+
+table tbody tr td:hover {
+    transform: scale(1.05); /* Slightly grow the cell */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+    background-color: #e2e2e2; /* Change background color when hovered */
+}
+
+/* Ensure links take up full space of their cells */
+table td a.table-link {
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+
+/* Hover effect for the table links */
+table td a.table-link:hover {
+    background-color: #e2e2e2;
+}
+
+table td {
+    text-align: center;
+    vertical-align: middle; /* Ensures vertical centering */
+    border: 1px solid #ddd;
+    width: 150px; /* Fixed width */
+    height: 30px; /* Fixed height */
+    overflow: hidden; /* Ensure content doesn't overflow */
+}
+
+table tbody tr td:hover {
+    background-color: #e2e2e2; /* Lighten the background color when hovered */
+    transform: none; /* Remove any transform effect */
+    box-shadow: none; /* Remove any shadow effect */
+}
+
+table tbody tr td {
+    background-color: #f7f7f7; /* Default background color */
+    text-align: center;
+    vertical-align: middle; /* Ensure vertical centering */
+    border: 1px solid #ddd;
+    transform: none; /* Ensure no transform in the default state */
+}
+
+.scrollable-table {
+    height: 400px; /* Set the height for scrollable content */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border-radius: 20px; /* Round the corners of the scrollable area */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow outside the scrollable area */
+    background-color: #ffffff; /* White background for better readability */
+    margin: 20px auto; /* Center the table */
+    width: 90%; /* Limit table width to 90% of the page */
+}
+
+
+/* General Button Styles */
+.button {
+    font-size: 16px;
+    text-decoration: none;
+    color: #333;
+    padding: 2px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+/* See More Button */
+.see-more-btn:hover {
+    background-color: #f0f0f0;
+}
+
+/* Edit Button */
+.edit-btn:hover {
+    background-color: #d9f7d9;
+}
+
+/* Delete Button */
+.delete-btn:hover {
+    background-color: #f7d9d9;
+}
+
+/* Icon styling */
+.button i {
+    margin-right: 0px;
+}
+
+/*BURAYA EKLEDİM*/
+/* Genel gövde */
+body.tv-series-page {
+    background-color: darkgrey; /* Arka plan */
+}
+
+/* Arama çubuğu için stil */
+body.tv-series-page #search-bar {
+    width: 50%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+
+    margin-top: 20px; /* Yukarıdan boşluk eklemek için bu satırı ekleyin veya artırın */
+    margin-bottom: 10px;
+}
+
+/* Scrollable table stili */
+body.tv-series-page .scrollable-table {
+    position: relative; /* Sayfa akışına göre konumlandırma */
+    margin-top: 10px;   /* Search bar ile arada biraz boşluk */
+    height: 300px; /* Set the height for scrollable content */
+    width: 800px;       /* Genişlik */
+    overflow-y: scroll; /* İçerik taşarsa dikey kaydırma */
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: lightblue;
+    z-index: 999;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+    border-radius: 20px;
+    /* Sol hizalama */
+    margin-left: 0;     /* Sol kenara hizala */
+    margin-right: auto; /* Sağdan boşluk bırak */
+}
+
+body.tv-series-page .scrollable-table table {
+    width: 100%;       /* Tabloyu genişliğe göre ayarla */
+    border-collapse: collapse;
+    font-size: 14px;    /* Tabloyu küçültmek için yazı boyutunu küçült */
+}
+
+body.tv-series-page .scrollable-table table th,
+body.tv-series-page .scrollable-table table td {
+    padding: 5px;
+    text-align: left;
+    border: 1px solid #ddd;
+    color: black;
+}
+
+body.tv-series-page .scrollable-table table th {
+    background-color: #f4f4f4;
+}
+.tv-series-page table td.actions,
+.tv-series-page table th.actions {
+    width: 400px; /* Sadece tv-series-page için genişlik */
+    text-align: center; /* İsteğe bağlı: butonları ortala */
+}
+
+/* Tablo genel */
+body.tv-series-page table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow:hidden; /*ekledim*/
+}
+
+body.tv-series-page table th,
+body.tv-series-page table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+body.tv-series-page table th {
+    background-color: #f4f4f4;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* Button styles */
+body.tv-series-page .btn {
+    padding: 5px 10px;
+    margin: 5px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+body.tv-series-page .btn:hover {
+    background-color: #0056b3;
+}
+
+body.tv-series-page .btn-danger {
+    background-color: #dc3545;
+}
+
+body.tv-series-page .btn-danger:hover {
+    background-color: #c82333;
+}
+
+body.tv-series-page .btn-warning {
+    background-color: #ffc107;
+}
+
+body.tv-series-page .btn-warning:hover {
+    background-color: #e0a800;
+}
+
+/* Floating Box */
+body.tv-series-page #tv-series-box {
+   position: absolute;
+    top: 120px;
+    left: 80%;
+    transform: translateX(-50%);
+    width: 20%;  /* Sayfanın %50'si kadar genişlik */
+    height: 50%; /* Sayfanın %50'si kadar yükseklik */
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    display: block;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 18px;
+    z-index: 1000;
+}
+
+body.tv-series-page #tv-series-box .btn-box {
+    margin-top: 40px;
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+body.tv-series-page #best-of-2022-table {
+    background-color: pink;
+    width: 50%; /* Tabloyu tam genişlikte yap */
+    border-collapse: collapse; /* Kenarlıkların birleşmesini sağlar */
+    margin: 20px 0; /* Üst ve alt margin */
+    font-family: Arial, sans-serif; /* Yazı tipi */
+}
+
+/* Tablo başlıkları */
+body.tv-series-page #best-of-2022-table thead {
+    background-color: black; /* Başlık arka plan rengi */
+    color: white; /* Başlık yazı rengi */
+    text-align: left; /* Başlıkları sola hizala */
+}
+
+/* Tablo hücreleri */
+body.tv-series-page #best-of-2022-table th, #best-of-2022-table td {
+    padding: 12px 15px; /* Hücrelere iç boşluk ekle */
+    border: 1px solid #ddd; /* Hücre kenarlıkları */
+}
+
+body.tv-series-page #best-of-2022-table tbody tr:hover {
+    background-color: #ddd; /* Satır üzerine gelindiğinde renk değişimi */
+}
+
+body.tv-series-page #best-of-2022-table td {
+    font-size: 16px; /* Yazı boyutunu küçült */
+}
+
+/* Başlıkları daha büyük yapmak */
+body.tv-series-page #best-of-2022-table th {
+    color: black;
+    font-size: 18px; /* Başlık yazı boyutunu artır */
+    font-weight: bold; /* Başlık yazısını kalın yap */
+}
+
+/* General Form Element Styles */
+.filter-form select,
+.filter-form input[type="text"],
+.filter-form button.main-btn {
+    height: 40px; /* Uniform height */
+    width: 150px; /* Uniform width */
+    padding: 0 10px; /* Uniform padding */
+    border-radius: 10px; /* Rounded corners for consistency */
+    font-size: 16px; /* Font size for uniformity */
+    box-sizing: border-box; /* Ensure padding doesn't affect the element's size */
+    border-radius: 20px;
+}
+
+/* Specific Input and Select Styles */
+.filter-form input[type="text"] {
+    border: 1px solid #ddd; /* Thin gray border */
+    color: #333; /* Text color */
+    background-color: #ffffff; /* White background */
+    border-radius: 20px;
+}
+
+.filter-form select {
+    border: 1px solid #ddd; /* Thin gray border */
+    background-color: rgb(22, 57, 89); /* Dropdown background */
+    color: #ffffff; /* White text inside the dropdown */
+    border-radius: 20px;
+}
+
+/* Button Styling */
+.filter-form button.main-btn {
+    border: none; /* Remove border */
+    background-color: rgb(22, 57, 89); /* Button background */
+    color: #ffffff; /* White text color */
+    cursor: pointer; /* Pointer cursor for buttons */
+    transition: all 0.3s ease; /* Smooth hover effect */
+    border-radius: 20px;
+    width: auto;
+    min-width: 100px;
+    max-width: 300px;
+}
+
+.filter-form button.main-btn:hover {
+    background-color: #3a5569; /* Darker shade on hover */
+    transform: scale(1.05); /* Slight hover scaling */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Subtle shadow */
+    border-radius: 20px;
+}
+
+.filter-form {
+    display: flex; /* Use flexbox for layout */
+    gap: 10px; /* Space between elements */
+    justify-content: flex-start; /* Align elements to the left */
+    align-items: center; /* Align elements vertically */
+    border-radius: 20px;
+}
+
+
+body.tv-series-page .slider-container {
+    display: flex;
+    overflow-x: scroll;
+    gap: 20px;
+    padding: 10px;
+    scroll-snap-type: x mandatory;
+}
+
+body.tv-series-page .slide {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    width: 300px;
+    text-align: center;
+    background: #f0f0f0;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+body.tv-series-page #tv-series-box {
+    margin-top: 30px;
+}
+
+.scrollable-container2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.scrollable-row2 {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;  /* Space between the boxes */
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.series-box2 {
+    min-width: 250px;  /* Set a minimum width for each box */
+    padding: 10px;
+    background-color: #f4f4f4;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.series-box2 h3 {
+    font-size: 18px;
+    margin: 0 0 10px 0;
+}
+
+.series-box2 p {
+    font-size: 14px;
+    margin: 0;
+}
+
+.add-tv-series-btn {
+    display: inline-block; /* Butonun çevresindeki boşlukları etkili yapar */
+    margin-top: 20px; /* Üst taraf için boşluk */
+    margin-bottom: 30px; /* Alt taraf için boşluk */
+
+    padding: 10px 20px; /* İçerik çevresine boşluk ekler */
+    background-color: #007bff; /* Mavi bir arka plan rengi */
+    color: white; /* Yazı rengini beyaz yapar */
+    text-decoration: none; /* Alt çizgiyi kaldırır */
+    border-radius: 5px; /* Kenarları yuvarlar */
+    border: none; /* Varsayılan kenarlığı kaldırır */
+    font-size: 16px; /* Yazı boyutunu ayarlar */
+    text-align: center; /* Metni ortalar */
+    cursor: pointer; /* Üzerine gelince imleci işaretçi yapar */
+}
+
+/* Center Buttons and Inputs */
+.form-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center; /* Center elements horizontally */
+    align-items: center; /* Center elements vertically */
+    gap: 15px; /* Add spacing between elements */
+    margin: 0 auto; /* Center the container itself within its parent */
+}
+
+
+/* Modal Background */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top of other content */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto; /* Centered in the screen */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%; /* Set width */
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    animation: slide-down 0.3s ease-out;
+}
+
+/* Close Button */
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover, .close-btn:focus {
+    color: black;
+    text-decoration: none;
+}

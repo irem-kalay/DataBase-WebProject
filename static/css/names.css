@@ -1,0 +1,478 @@
+h2 {
+    font-size: 32px;  /* Larger font size for the main title */
+    margin-bottom: 10px;
+}
+
+.header-content {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap; /* Ensures proper wrapping for smaller screens */
+    align-items: flex-start; /* Aligns items to the top */
+    justify-content: flex-start; /* Items align to the start horizontally */
+    background-color: rgb(15, 33, 50);
+    padding: 30px;
+    padding-right: 50px;
+    padding-left: 10px;
+    margin-left: -30px;
+    width: 100%;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.header {
+    display: flex; /* Use Flexbox for layout */
+    justify-content: space-between; /* Align the header and button on opposite ends */
+    align-items: center; /* Vertically center the items */
+    width: 100%; /* Ensure the header spans the full width */
+    margin-right: 50px;
+    box-sizing: border-box; /* Make sure padding is included in the element's total width */
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 40px;
+    background-color: transparent;
+    color: white;
+    font-weight: lighter;
+}
+
+.profession {
+    color: rgba(255, 255, 255, 0.7); /* Light transparency */
+    font-size: 30px;
+}
+
+.crud-buttons button {
+    position: relative; /* Relative to the header */
+    z-index: 10; /* Ensure it stays on top of other elements */
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    background: transparent; /* Remove the background */
+    border: none; /* Remove any border */
+    outline: none; /* Remove the outline when focused */
+    box-shadow: none; /* Remove any box shadow, if applied */
+    font-size: 20px;
+}
+
+.description {
+    display: flex; /* Use flexbox for layout */
+    gap: 5px; /* Space between the buttons and the text */
+    margin-right: 50px;
+    margin-left: 20px;
+}
+
+.description img {
+    margin-top: 15px;
+    width: 40%;
+    height: 405px; /* Fixed height to crop the image */
+    object-fit: cover; /* Crop and cover the area */
+    overflow: hidden; /* Ensure any overflowing content is hidden */
+    border-radius: 10px;
+}
+
+.media-buttons {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 5px; /* Spacing between buttons */
+    margin: 15px 0;
+}
+
+.media-button {
+    background-color: rgba(255, 255, 255, 0.1); /* White, but very transparent */
+    height: 200px; /* Fixed height */
+    width: 200px; /* Fixed width to make them square */
+    border-radius: 10px; /* Rounded corners */
+    font-size: 18px; /* Adjust font size */
+    color: rgba(255, 255, 255, 1); /* White and fully opaque text */
+    display: flex; /* Enables flexbox for centering content */
+    align-items: center; /* Vertically centers text */
+    justify-content: center; /* Horizontally centers text */
+    text-align: center; /* Ensure the text is centered horizontally */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition for hover */
+    flex-direction: column;
+}
+
+.media-button:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Lighter on hover */
+}
+
+.media-icon {
+    font-size: 40px; /* Make the icon large */
+}
+
+.media-text {
+    font-size: 14px; /* Make the text smaller than the icon */
+    font-weight: bold; /* Bold text for better visibility */
+}
+
+.text-content {
+    width: 60%;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column; /* Stack text vertically */
+    justify-content: top; /* Vertically center the text */
+}
+
+
+/* Known For Section */
+.known-for {
+    margin-bottom: 10px;
+    margin-top: 30px;
+}
+
+/* Wrapper for the Best Movies Section */
+
+/* Initially collapsed state */
+.best-movies.collapsed {
+    height: 0;  /* Set height to 0 when collapsed */
+    padding: 0;
+    overflow: hidden;
+    transition: height 0.5s ease-out, padding 0.5s ease-out;
+}
+
+/* Non-collapsed state */
+.best-movies {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 10px 0;
+    scroll-behavior: smooth;
+    gap: 15px;
+    transition: height 0.5s ease, padding 0.5s ease;
+    height: 110px; /* Set height to the full height when expanded */
+}
+
+.best-movies-wrapper {
+    width: 100%;  /* Ensure the wrapper takes the full width */
+    overflow-x: auto;  /* Enable horizontal scrolling */
+    max-height: 103px;  /* Fixed height for the scrollable section */
+    padding: 10px 0;  /* Optional padding */
+}
+
+/* Best Movies Section (Horizontal scrolling) */
+.best-movies {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;  /* Space between the cards */
+    padding: 0;
+    width: max-content;  /* Allow cards to overflow */
+    height: min-content;
+}
+
+.known-for h3 {
+    font-size: 24px;  /* Font size for Actor, Director, Writer */
+    cursor: pointer;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #ccc;  /* Thin line under each section title */
+    padding-bottom: 5px;
+}
+
+/* Known For Section */
+.known-for {
+    margin-bottom: 20px;  /* Margin between sections */
+}
+
+/* Styling for the movie-section (Actor, Director, Writer) */
+.movie-section {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 5px;  /* Reduced gap for collapsed state */
+    padding: 10px 0;
+    transition: height 0.2s ease, padding 0.2s ease;
+    height: 110px;  /* Height when expanded */
+}
+
+/* Initially collapsed state */
+.movie-section.collapsed {
+    height: 0;  /* Set height to 0 when collapsed */
+    padding: 0;
+    overflow: hidden;
+    transition: height 0.2s ease-out, padding 0.2s ease-out;
+}
+
+/* Make the entire card clickable */
+.movie-card {
+    display: flex;
+    align-items: center;
+    height: 100px;
+    width: 400px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    overflow: hidden;
+    text-decoration: none;  /* Remove underline from links */
+    color: inherit;  /* Inherit color to avoid default link color */
+}
+
+/* Style for the movie card content */
+.movie-card-content {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+/* Movie Poster Styling */
+.movie-poster {
+    height: 100%;  /* Make the image fill the height of the card */
+    width: 70px;   /* Set the width of the image to 70px */
+    object-fit: cover;  /* Ensure the image covers the height */
+    border-radius: 10px 0 0 10px;  /* Rounded corners on the left side of the image */
+}
+
+/* Movie Info Styling */
+.movie-info {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #333;
+    flex-grow: 1;
+    opacity: 0.7;  /* Slightly transparent */
+}
+
+/* Title Styling */
+.movie-info h3 {
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: bold;  /* Make the title bold */
+    opacity: 2;  /* Ensure the title is fully opaque */
+    color: black;
+}
+
+/* Paragraph Styling */
+.movie-info p {
+    margin: 5px 0;
+}
+
+/* Rating Star Styling */
+.rating-star {
+    color: #FFD700;  /* Golden star color */
+    margin-right: 5px;  /* Space between the star and the rating */
+}
+
+/* Hover Effects for Movie Card */
+.movie-card:hover {
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Hide the scrollbar */
+.movie-section::-webkit-scrollbar {
+    display: none;  /* Hide the scrollbar */
+}
+
+.detail {
+    border-bottom: 1px solid #ccc;  /* Thin line under each section title */
+}
+
+.Personal h2 {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;  /* Thin line under each section title */
+}
+
+
+
+/* MORE PART */
+
+.More {
+    margin-top: 30px;
+    background-color: rgb(15, 33, 50);
+    color: white;
+    text-align: left;
+    padding: 30px;
+    padding-right: 50px;
+    padding-left: 10px;
+    margin-left: -30px;
+    margin-bottom: -40px;
+    width: 100%;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.More h2 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    margin-left: 20px;
+}
+
+.More p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+}
+
+/* Scrollable container for the cards */
+.scroll-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cards-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 10px;
+}
+
+.person-card {
+    width: 200px;
+    height: 340px;
+    background-color: rgba(255, 255, 255, 0.097);  /* Slightly lighter black */
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;  /* Remove link underline */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Align content to the top */
+    position: relative;
+    overflow: hidden; /* Hide overflow */
+    transition: background-color 0.3s ease;
+    flex-shrink: 0;  /* Prevent cards from shrinking */
+}
+
+.person-card:hover {
+    background-color: rgba(0, 0, 0, 0.9);  /* Darken the card on hover */
+}
+
+/* Person image */
+.person-image {
+    width: 100%;
+    height: 290px;
+    object-fit: cover;
+}
+
+/* Name overlay */
+.name-overlay {
+    position: absolute;
+    bottom: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.name-overlay p {
+    margin: 0;
+    font-size: 16px;
+    font-weight: lighter;
+}
+
+/* Scroll buttons */
+.scroll-arrow {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.scroll-arrow.left {
+    left: 10px;
+}
+
+.scroll-arrow.right {
+    right: 10px;
+}
+
+/* Ensure cards are properly scrollable */
+.cards-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Optional: ensure cards don't shrink in size */
+.cards-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 10px;
+    white-space: nowrap; /* Prevent wrapping of cards */
+}
+
+footer {
+    position: bottom;  /* Keep it at the bottom of the page */
+    bottom: 0;        /* Align it at the very bottom */
+    left: 0;          /* Align it to the left */
+    padding-bottom: 10px;  /* Optional: Space from the bottom */
+    background-color: rgb(15, 33, 50); /* Dark background color */
+    padding-top: 10px;
+    padding-left: 20px;
+    color: white;         /* Text color */
+    text-align: left;     /* Align text to the left */
+}
+
+
+/* MODAL AREA */
+
+/* Modal styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scrolling if needed */
+    background-color: rgb(0,0,0); /* Black background */
+    background-color: rgba(0,0,0,0.4); /* Black with opacity */
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Adjust as needed */
+}
+
+/* Close button */
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    right: 20px;
+    top: 10px;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+.Personal h2 {
+    font-size: 32px;  /* Larger font size for the main title */
+    margin-bottom: 0;  /* Remove margin under the h2 */
+    display: inline-block;  /* Align h2 in a row with the button */
+    vertical-align: middle; /* Align vertically with the button */
+}
+
+.Personal .editButton {
+    background: none;    /* Remove background */
+    border: none;        /* Remove border */
+    padding: 10px 15px;   /* Make the button bigger */
+    font-size: 20px;     /* Set the size of the button text/icon */
+    cursor: pointer;    /* Pointer cursor on hover */
+    vertical-align: middle; /* Align the button vertically with the h2 */
+    margin-left: 10px;   /* Space between the header and the button */
+}
+
+.Personal .editButton i {
+    font-size: 1.2em;   /* Increase the size of the icon */
+}

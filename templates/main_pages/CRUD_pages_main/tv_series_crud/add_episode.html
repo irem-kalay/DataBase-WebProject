@@ -1,0 +1,80 @@
+<head>
+    <style>
+        body {
+            background-color: darkgrey;
+            font-family: Arial, sans-serif; /* Yazı tipi ekledim, daha iyi görünmesi için */
+        }
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+
+<form method="POST" action="{{ url_for('episodes_add.add_episode') }}">
+    <input type="hidden" name="parentTconst" value="{{ parentTconst }}">
+
+     <label for="tv_serie_title">TV Series Title:</label>
+    <input type="text" name="tv_serie_title" required>  <!-- User enters the TV series title here -->
+
+    <label for="tconst">Episode Tconst:</label>
+    <input type="text" name="tconst" required>
+
+    <label for="title">Episode Title:</label>
+    <input type="text" name="title" required>
+
+    <label for="seasonNumber">Season Number:</label>
+    <input type="number" name="seasonNumber" required>
+
+    <label for="episodeNumber">Episode Number:</label>
+    <input type="number" name="episodeNumber" required>
+
+     <label for="genre">Genre:</label>
+    <select name="genre" required>
+        <option value="scifi">Sci-Fi</option>
+        <option value="comedy">Comedy</option>
+        <option value="romance">Romance</option>
+        <option value="action">Action</option>
+        <option value="adventure">Adventure</option>
+        <option value="fantasy">Fantasy</option>
+        <option value="horror">Horror</option>
+        <option value="drama">Drama</option>
+        <option value="romantic_comedy">Romantic Comedy</option>
+    </select>
+    <button type="submit">Add Episode</button>
+</form>
